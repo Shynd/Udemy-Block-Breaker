@@ -8,6 +8,8 @@ public class Brick : MonoBehaviour
     public AudioClip crack;
     private bool isBreakable;
 
+    public GameObject smoke;
+
     public static int breakableCount = 0;
 
     void Start()
@@ -41,12 +43,22 @@ public class Brick : MonoBehaviour
         {
             breakableCount--;
             Debug.Log("Breakables: " + breakableCount);
+            PuffSmoke();
             Destroy(gameObject);
             levelManager.BrickDestroyedMessage();
         }
         else
         {
             LoadSprites();
+        }
+    }
+
+    void PuffSmoke()
+    {
+        var smokePuff = Instantiate(smoke, this.transform.position, Quaternion.identity) as GameObject;
+        if (smokePuff != null)
+        {
+            smokePuff.GetComponent<ParticleSystem>().startColor = GetComponent<SpriteRenderer>().color;
         }
     }
 
